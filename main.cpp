@@ -2,9 +2,6 @@
 #include <vector>
 using namespace std;
 
-#include <string>
-#include <sstream>
-
 int max (int x, int y) { return (x > y)? x : y; }
 
 void printMatriz(vector <vector<int>> &matriz){
@@ -107,12 +104,11 @@ void lps(string str){
 
 	}
 	cout << matriz[i-1][i-1] << endl;
+	matriz.clear();
 	return;
 }
 
 int main(){
-	std::ios::sync_with_stdio(false);
-
 	string str;
 	while( cin >> str ){
 		lps(str);
