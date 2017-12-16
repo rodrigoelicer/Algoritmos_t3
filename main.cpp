@@ -2,6 +2,9 @@
 #include <vector>
 using namespace std;
 
+#include <string>
+#include <sstream>
+
 int max (int x, int y) { return (x > y)? x : y; }
 
 void printMatriz(vector <vector<int>> &matriz){
@@ -16,51 +19,25 @@ void printMatriz(vector <vector<int>> &matriz){
 		}
 		cout << "]" << endl;
 	}
+	cout << endl;
 }
 
-void lps(vector <vector<int>> &matriz, vector <string> &arr, int n){
-	int i;
+void printOutput(vector <vector<int>> &matriz, string arr){
 
-	string str = arr.back();
-
-	//crea nueva columna
-	vector <int> nuevo;
-	matriz.push_back(nuevo);
-
-	matriz[n].push_back(1);
-	//cout << "n: " << n << endl;
-	for( i = 0; i < n; i++ ){
-		//cout << "str: " << str << endl;
-		//cout << "arr[" << n-i-1 << "]: " << arr[n-i-1] << endl;
-		if ( str == arr[n-i-1] && n == 1 ){
-			//cout << "entre1" << endl;
-			matriz[n].push_back(2);
-		}
-		else if ( str == arr[n-i-1] ){
-			//cout << "entre2" << endl;
-			matriz[n].push_back( 2 + matriz[n-1][i-1] );
-		}
-		else{
-			//cout << "entre3" << endl;
-			matriz[n].push_back( max(matriz[n][i], matriz[n-1][i]) );
-		}
-	}
-	//printMatriz(matriz);
-
-   return;
-}
-
-void printOutput(vector <vector<int>> &matriz, vector <string> &arr, int n){
-	int i = n, j = n;
-	vector <string> output;
+	unsigned int n = matriz.size()-1;
+	unsigned int i = n, j = n;
+	vector <char> output;
 
 	//cout << "n: " << n << endl;
-
 	if( matriz[i][j] == 1 ){
 		output.push_back(arr[0]);
 	}
 
 	while( matriz[i][j] != 1 ){
+		//cout << "i: " << i << endl;
+		//cout << "j: " << j << endl;
+		//cout << "matriz[i][j]: " << matriz[i][j] << endl;
+		//cout << "matriz[i-1][j-2]: " << matriz[i-1][j-2] << endl;
 		if( matriz[i][j] > matriz[i-1][j-1] ){
 			//cout << "entre1" << endl;
 			cout << arr[i];
@@ -81,7 +58,6 @@ void printOutput(vector <vector<int>> &matriz, vector <string> &arr, int n){
 			}
 		}
 	}
-	//cout << "wena" << endl;
 	for( i = output.size(); i > 0 ; i-- ){
 		//cout << "i-1: " << i-1 << endl;
 		cout << output[i-1];
@@ -90,18 +66,56 @@ void printOutput(vector <vector<int>> &matriz, vector <string> &arr, int n){
 	cout << endl << endl;
 }
 
-int main(){
-	vector <vector<int>> matriz;
-	vector <string> arr;
-	string str;
-	int n = -1;
+void lps(string str){
 
-	while( cin >> str ){
-		arr.push_back(str);
-		n++;
-		lps(matriz, arr, n);
+	unsigned int n = str.length();
+	vector <vector<int>> matriz;
+	unsigned int i, j;
+
+	//cout << "n: " << n << endl;
+
+	for( i = 0; i<=n-1 ;i++){
+		//cout << "i: " << i << endl;
+
+		vector <int> nuevo;
+		matriz.push_back(nuevo);
+		matriz[i].push_back(1);
+
+		char chr = str[i];
+
+		//cout << "chr: " << chr << endl;
+
+		for( j = 1; j<=i; j++){
+			//cout << "j: " << j << endl;
+			//cout << "str["<<i-j<<"]: " << str[i-j] << endl;
+
+			if ( chr == str[i-j] && j == 1 ){
+				//cout << "entre1" << endl;
+				matriz[i].push_back(2);
+			}
+			else if ( chr == str[i-j] ){
+				//cout << "entre2" << endl;
+				matriz[i].push_back( 2 + matriz[i-1][j-2] );
+			}
+			else{
+				//cout << "entre3" << endl;
+				matriz[i].push_back( max(matriz[i][j-1], matriz[i-1][j-1]) );
+			}
+		}
 		//printMatriz(matriz);
-		printOutput(matriz, arr, n);
+		//printOutput(matriz,str);
+
+	}
+	cout << matriz[i-1][i-1] << endl;
+	return;
+}
+
+int main(){
+	std::ios::sync_with_stdio(false);
+
+	string str;
+	while( cin >> str ){
+		lps(str);
 	}
 
 	return 0;
