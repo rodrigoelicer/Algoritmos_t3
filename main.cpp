@@ -28,7 +28,6 @@ void lps(vector <vector<int>> &matriz, vector <string> &arr, int n){
 	matriz.push_back(nuevo);
 
 	matriz[n].push_back(1);
-	cout << endl;
 	//cout << "n: " << n << endl;
 	for( i = 0; i < n; i++ ){
 		//cout << "str: " << str << endl;
@@ -46,9 +45,13 @@ void lps(vector <vector<int>> &matriz, vector <string> &arr, int n){
 			matriz[n].push_back( max(matriz[n][i], matriz[n-1][i]) );
 		}
 	}
-	printMatriz(matriz);
+	//printMatriz(matriz);
 
    return;
+}
+
+void printOutput(){
+
 }
 
 int main(){
@@ -62,6 +65,33 @@ int main(){
 		n++;
 		lps(matriz, arr, n);
 	}
+	printMatriz(matriz);
+
+	int i = n, j = n;
+	vector <string> output;
+
+	while( matriz[i][j] != 1 ){
+		if( matriz[i][j] > matriz[i-1][j-1] ){
+			cout << arr[i];
+			output.push_back(arr[i]);
+			j--;
+			i--;
+		}
+		else{
+			cout << arr[i];
+			output.push_back(arr[i]);
+			i--;
+			j -= 2;
+			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
+				cout << arr[i];
+			}
+		}
+	}
+
+	for( i = output.size(); i >= 0 ; i-- ){
+		cout << output[i];
+	}
+
 
 	return 0;
 }
