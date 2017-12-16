@@ -50,8 +50,44 @@ void lps(vector <vector<int>> &matriz, vector <string> &arr, int n){
    return;
 }
 
-void printOutput(){
+void printOutput(vector <vector<int>> &matriz, vector <string> &arr, int n){
+	int i = n, j = n;
+	vector <string> output;
 
+	//cout << "n: " << n << endl;
+
+	if( matriz[i][j] == 1 ){
+		output.push_back(arr[0]);
+	}
+
+	while( matriz[i][j] != 1 ){
+		if( matriz[i][j] > matriz[i-1][j-1] ){
+			//cout << "entre1" << endl;
+			cout << arr[i];
+			output.push_back(arr[i]);
+			i--;
+			j -= 2;
+			//Imprime el char de al medio solo si es distinto.
+			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
+				cout << arr[i];
+			}
+		}
+		else{
+			//cout << "entre2" << endl;
+			i--;
+			j--;
+			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
+				cout << arr[i];
+			}
+		}
+	}
+	//cout << "wena" << endl;
+	for( i = output.size(); i > 0 ; i-- ){
+		//cout << "i-1: " << i-1 << endl;
+		cout << output[i-1];
+
+	}
+	cout << endl << endl;
 }
 
 int main(){
@@ -64,34 +100,9 @@ int main(){
 		arr.push_back(str);
 		n++;
 		lps(matriz, arr, n);
+		//printMatriz(matriz);
+		printOutput(matriz, arr, n);
 	}
-	printMatriz(matriz);
-
-	int i = n, j = n;
-	vector <string> output;
-
-	while( matriz[i][j] != 1 ){
-		if( matriz[i][j] > matriz[i-1][j-1] ){
-			cout << arr[i];
-			output.push_back(arr[i]);
-			j--;
-			i--;
-		}
-		else{
-			cout << arr[i];
-			output.push_back(arr[i]);
-			i--;
-			j -= 2;
-			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
-				cout << arr[i];
-			}
-		}
-	}
-
-	for( i = output.size(); i >= 0 ; i-- ){
-		cout << output[i];
-	}
-
 
 	return 0;
 }
