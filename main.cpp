@@ -2,107 +2,48 @@
 #include <vector>
 using namespace std;
 
-int max (int x, int y) { return (x > y)? x : y; }
-
-void printMatriz(vector <vector<int>> &matriz){
-	size_t n = matriz.size(), i;
-
-	for( i = 0; i<n ; i++){
-		size_t m = matriz[i].size(), j;
-
-		cout << "[";
-		for( j = 0; j<m; j++){
-			cout << matriz[i][j] << ", ";
-		}
-		cout << "]" << endl;
-	}
-	cout << endl;
+//Función que retorna el máximo entre 2 valores.
+int max (int x, int y){
+	return (x > y) ? x : y;
 }
 
-void printOutput(vector <vector<int>> &matriz, string arr){
-
-	unsigned int n = matriz.size()-1;
-	unsigned int i = n, j = n;
-	vector <char> output;
-
-	//cout << "n: " << n << endl;
-	if( matriz[i][j] == 1 ){
-		output.push_back(arr[0]);
-	}
-
-	while( matriz[i][j] != 1 ){
-		//cout << "i: " << i << endl;
-		//cout << "j: " << j << endl;
-		//cout << "matriz[i][j]: " << matriz[i][j] << endl;
-		//cout << "matriz[i-1][j-2]: " << matriz[i-1][j-2] << endl;
-		if( matriz[i][j] > matriz[i-1][j-1] ){
-			//cout << "entre1" << endl;
-			cout << arr[i];
-			output.push_back(arr[i]);
-			i--;
-			j -= 2;
-			//Imprime el char de al medio solo si es distinto.
-			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
-				cout << arr[i];
-			}
-		}
-		else{
-			//cout << "entre2" << endl;
-			i--;
-			j--;
-			if( matriz[i][j] == 1 && arr[i]!=output.back() ){
-				cout << arr[i];
-			}
-		}
-	}
-	for( i = output.size(); i > 0 ; i-- ){
-		//cout << "i-1: " << i-1 << endl;
-		cout << output[i-1];
-
-	}
-	cout << endl << endl;
-}
-
+//Función que recorre un string, crea una matriz[n][n] y obtiene el valor de la
+//subsecuencia palíndroma más grande. Lo hace en tiempo O(n²)
 void lps(string str){
 
-	unsigned int n = str.length();
+	//Se crea un vector para el string dado.
 	vector <vector<int>> matriz;
+	unsigned int n = str.length();
 	unsigned int i, j;
 
-	//cout << "n: " << n << endl;
-
+	//Se recorre el string
 	for( i = 0; i<=n-1 ;i++){
-		//cout << "i: " << i << endl;
-
+		//Por cada letra se agrega un nuevo vector al vector matriz,
+		//generando una matriz.
 		vector <int> nuevo;
 		matriz.push_back(nuevo);
+		//Se agrega el valor base que indica que son la misma letra
 		matriz[i].push_back(1);
-
+		//Char que se va a comparar con todos los otros char que le anteceden.
 		char chr = str[i];
-
-		//cout << "chr: " << chr << endl;
-
+		//se compara el char str[i] con los distintos char[i-j]
+		//Va desde el final hacia el principio.
 		for( j = 1; j<=i; j++){
-			//cout << "j: " << j << endl;
-			//cout << "str["<<i-j<<"]: " << str[i-j] << endl;
-
+			//Caso base donde el string puede tener largo 2
 			if ( chr == str[i-j] && j == 1 ){
-				//cout << "entre1" << endl;
 				matriz[i].push_back(2);
 			}
+			//Caso donde se suma 2 más el largo del substring anterior.
 			else if ( chr == str[i-j] ){
-				//cout << "entre2" << endl;
 				matriz[i].push_back( 2 + matriz[i-1][j-2] );
 			}
+			//Caso donde no hay match y se toma el máximo de lo que ya hay.
 			else{
-				//cout << "entre3" << endl;
 				matriz[i].push_back( max(matriz[i][j-1], matriz[i-1][j-1]) );
 			}
 		}
-		//printMatriz(matriz);
-		//printOutput(matriz,str);
-
 	}
+	//Se imprime el último valor que indica el palíndromo más largo.
 	cout << matriz[i-1][i-1] << endl;
 	matriz.clear();
 	return;
@@ -110,9 +51,11 @@ void lps(string str){
 
 int main(){
 	string str;
+	//Recibe inputs hasta que el usuario desee.
+	//Con ctrl+D se hace EOF. ctrl+C se le hace kill
 	while( cin >> str ){
+		//Función que revisa el largo de la subsecuencia palíndroma más grande.
 		lps(str);
 	}
-
 	return 0;
 }
